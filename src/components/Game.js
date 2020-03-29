@@ -8,7 +8,9 @@ class Game extends React.Component {
         this.state = {
             history: [{ squares: Array(9).fill(null) }],
             step: 0,
-            xIsNext: true
+            xIsNext: true,
+            preview_index: 0,
+            hidevalue: true
         };
     }
 
@@ -74,15 +76,31 @@ class Game extends React.Component {
         });
     }
 
+    renderpreview(idx) {
+        this.setState({
+            preview_index: idx,
+            hidevalue: !this.state.hidevalue
+        });
+    }
+
+    hideswitch() {
+        this.setState({
+            hidevalue: !this.state.hidevalue
+        });
+    }
+
     getMoves() {
         return this.state.history.map((step, idx) => {
             const desc = idx ? `Go to move #${idx}` : "Go to game start";
+
             return (
                 <li key={idx}>
                     <button
                         onClick={() => {
                             this.goto(idx);
                         }}
+                        onMouseEnter={() => this.renderpreview(idx)}
+                        onMouseLeave={() => this.hideswitch()}
                     >
                         {desc}
                     </button>
@@ -110,6 +128,7 @@ class Game extends React.Component {
                         onClick={i => this.handleClick(i)}
                     />
                 </div>
+
                 <div className="game-info">
                     <div>{status}</div>
                     <ol>{this.getMoves()}</ol>
@@ -129,6 +148,20 @@ class Game extends React.Component {
                         </button>
                     )}
                 </div>
+                {this.state.hidevalue === false && (
+                    <div
+                        className="preview-section"
+                        style={{
+                            marginLeft: "50px",
+                            opacity: "0.3"
+                        }}
+                    >
+                        <Board
+                            squares={history[this.state.preview_index].squares}
+                            hide-option={this.state.hidevalue}
+                        />
+                    </div>
+                )}
             </div>
         );
     }
