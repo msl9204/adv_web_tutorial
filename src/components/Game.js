@@ -101,6 +101,7 @@ class Game extends React.Component {
                         }}
                         onMouseEnter={() => this.renderpreview(idx)}
                         onMouseLeave={() => this.hideswitch()}
+                        style={{ marginBottom: "10px" }}
                     >
                         {desc}
                     </button>
@@ -131,22 +132,24 @@ class Game extends React.Component {
 
                 <div className="game-info">
                     <div>{status}</div>
+                    <div>
+                        {this.state.step >= 1 && (
+                            <button
+                                onClick={() => {
+                                    this.setState({
+                                        step: this.state.step - 1,
+                                        history: this.state.history.slice(
+                                            0,
+                                            this.state.step
+                                        )
+                                    });
+                                }}
+                            >
+                                Undo
+                            </button>
+                        )}
+                    </div>
                     <ol>{this.getMoves()}</ol>
-                    {this.state.step >= 1 && (
-                        <button
-                            onClick={() => {
-                                this.setState({
-                                    step: this.state.step - 1,
-                                    history: this.state.history.slice(
-                                        0,
-                                        this.state.step
-                                    )
-                                });
-                            }}
-                        >
-                            Undo
-                        </button>
-                    )}
                 </div>
                 {this.state.hidevalue === false && (
                     <div
